@@ -1,24 +1,28 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <header>
+      <img alt="KAVI Logo" src="./assets/KAVI_logo_black.png"/>
+      <h1>Shoutbox</h1>
+    </header>
+
+    <div class="container">
+      <ShoutForm />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import ShoutForm from './components/molecules/ShoutForm.vue';
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    ShoutForm
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
