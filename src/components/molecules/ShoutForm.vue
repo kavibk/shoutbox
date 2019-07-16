@@ -21,7 +21,7 @@ export default {
 
   data: function() {
     return {
-      picker: true
+      picker: false
     }
   }
 
