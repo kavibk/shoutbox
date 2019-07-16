@@ -3,7 +3,9 @@
   as well as another prop for whether or not this is a duplicate. -->
 <template>
   <li class="number-list-item">
-    {{ number }}
+    <div>
+      <span>{{ number }}</span>
+    </div>
   </li>
 </template>
 
@@ -16,7 +18,17 @@ export default {
 
 <style lang="scss" scoped>
 .number-list-item {
-  background-color: #35cabf;
-  color: #FFF;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  div {
+    background-color: #35cabf;
+    border-radius: 8px;
+    color: #FFF;
+    font-weight: 700;
+    padding: 0 10px;
+  }
 }
 </style>
