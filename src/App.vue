@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <header>
+
+    <header class="brand">
       <img alt="KAVI Logo" src="./assets/KAVI_logo_black.png"/>
       <h1>Shoutbox</h1>
     </header>
@@ -45,12 +46,4 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style lang="scss" src="./styles/styles.scss"/>
