@@ -17,6 +17,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/colors';
 .number-list-item {
   list-style: none;
   display: flex;
@@ -24,9 +25,9 @@ export default {
   justify-content: flex-start;
 
   div {
-    background-color: #35cabf;
+    background-color: $kavi-blue;
     border-radius: 8px;
-    color: #FFF;
+    color: $white;
     font-weight: 700;
     padding: 0 10px;
   }
