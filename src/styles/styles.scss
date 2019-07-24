@@ -6,3 +6,11 @@
 
 @import 'buttons';
 @import 'colors';
+
+.modal {
+  display: none;
+
+  &.is-open {
+    display: block;
+  }
+}
