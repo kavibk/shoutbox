@@ -5,51 +5,13 @@
 
     <div tabindex="-1" data-micromodal-close class="modal-overlay">
 
-      <div role="dialog" aria-modal="true" aria-labelledby="add-group-modal-title"
+      <div role="dialog" aria-modal="true" aria-labelledby="group-modal-title"
         class="modal-container">
 
-        <header class="modal-header">
-          <p id="add-group-modal-title" class="modal-title">
-            <strong>Add New Group</strong>
-          </p>
-
-          <button aria-label="Close modal" class="button button-clear" data-micromodal-close>
-            <strong>
-              <i class="fas fa-times-circle"></i>
-              Close
-            </strong>
-          </button>
-        </header>
-
-        <div id="add-group-modal-content" class="modal-content">
-
-          <form @submit.prevent="createGroup">
-
-            <input type="text" placeholder="Name of group" v-model="name"/>
-
-            <div class="row">
-
-              <div class="column">
-
-                <NumberField
-                  @numbers="numbers = $event"/>
-
-                <NumberList :numbers="numbers" />
-
-              </div>
-
-              <div class="column">
-
-                <button type="submit" class="button button-clear float-right" v-if="validGroup">
-                  Save Group
-                </button>
-
-              </div>
-
-            </div>
-
-          </form>
-        </div>
+        <!--
+          <ModalAddNewGroup />
+        -->
+        <ModalEditGroup />
 
       </div>
     </div>
@@ -59,74 +21,12 @@
 <script>
 import axios from 'axios';
 import MicroModal from 'micromodal';
-import NumberField from './NumberField.vue';
-import NumberList from './NumberList.vue';
+import ModalAddNewGroup from './ModalAddNewGroup.vue';
+import ModalEditGroup from './ModalEditGroup.vue';
 export default {
   name: "Modal",
-  components: { NumberField, NumberList },
+  components: { ModalAddNewGroup, ModalEditGroup },
 
-  data: function() {
-    return {
-      name: '',
-      numbers: []
-    }
-  },
-
-  computed: {
-
-    // Used to determine if we have all we need to create a valid group.  From
-    // the backend's perspective, we really only need a name, but the frontend
-    // goes further and wants numbers too
-    validGroup: function() {
-      if (this.name.length && this.numbers.length) {
-        return true;
-      }
-      return false;
-    }
-
-  },
-
-  methods: {
-
-    // Used to create a group, naturally
-    createGroup: function() {
-
-      // Make sure name is present and we have some numbers
-      if (this.name.length == 0 || this.numbers.length == 0) {
-        return;
-      }
-
-      // Otherwise, make the request.
-      let phoneIncludes = [];
-      this.numbers.forEach((number) => {
-        phoneIncludes.push({
-          type: "phones",
-          attributes: {
-            number
-          }
-        })
-      });
-
-      let payload = JSON.stringify({
-        data: {
-          type: "groups",
-          attributes: {
-            name: this.name
-          }
-        },
-        included: phoneIncludes
-      });
-      axios.post(`/groups`, payload)
-      .then((response) => {
-        // TODO
-      })
-      .catch((error) => {
-        // TODO:
-      });
-      
-    }
-
-  },
 
   mounted: function() {
     MicroModal.init();
@@ -134,7 +34,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 // Right then, so this is all copy-pasted from here https://gist.github.com/ghosh/4f94cf497d7090359a5c9f81caf60699
 // Micromodal is a helpful minimal little modal library / package, but the
 // author opted to include absolutely no styling whatsoever.
