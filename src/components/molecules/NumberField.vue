@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { AsYouType, findNumbers } from 'libphonenumber-js';
+import { AsYouType, findNumbers, parsePhoneNumberFromString } from 'libphonenumber-js';
 export default {
   name: "NumberField",
   data: function() {
@@ -30,6 +30,14 @@ export default {
     // Bubbles up a number from the input to parent component, but only if
     // said number is a valid number
     addNumber: function() {
+
+      // First, we're going to convert the number into an international-style
+      // number
+      let parsedNum = parsePhoneNumberFromString(this.value, 'US');
+      if (parsedNum.isValid()) {
+        this.$emit('numbers', [parsedNum.formatInternational()]);
+        this.value = '';
+      }
 
     },
 
