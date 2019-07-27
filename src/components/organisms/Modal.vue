@@ -8,10 +8,23 @@
       <div role="dialog" aria-modal="true" aria-labelledby="group-modal-title"
         class="modal-container">
 
+        <header class="modal-header">
+          <p id="group-modal-title" class="modal-title">
+            <strong>Add Group(s)</strong>
+          </p>
+
+          <button aria-label="Close modal" class="button button-clear" data-micromodal-close>
+            <strong>
+              <i class="fas fa-times-circle"></i>
+              Close
+            </strong>
+          </button>
+        </header>
+
+        <ModalAddNewGroup />
         <!--
-          <ModalAddNewGroup />
+          <ModalEditGroup />
         -->
-        <ModalEditGroup />
 
       </div>
     </div>
