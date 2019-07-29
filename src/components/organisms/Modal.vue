@@ -21,7 +21,7 @@
           </button>
         </header>
 
-        <ModalAddNewGroup />
+        <ModalAddNewGroup @close="closeModal"/>
         <!--
           <ModalEditGroup />
         -->
@@ -40,6 +40,13 @@ export default {
   name: "Modal",
   components: { ModalAddNewGroup, ModalEditGroup },
 
+  methods: {
+
+    closeModal: function() {
+      document.getElementById('add-group-modal').classList.remove('is-open');
+    }
+
+  },
 
   mounted: function() {
     MicroModal.init();

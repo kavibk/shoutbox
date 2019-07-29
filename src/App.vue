@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-    <Modal/>
+    <Modal />
 
     <header class="brand">
       <img alt="KAVI Logo" src="./assets/KAVI_logo_black.png"/>
@@ -46,9 +46,6 @@ export default {
     return {
       numbers: []
     }
-  },
-
-  mounted: function() {
   }
 
 }

@@ -36,8 +36,10 @@
 </template>
 
 <script>
+import axios from 'axios';
 import NumberField from '../molecules/NumberField.vue';
 import NumberList from '../molecules/NumberList.vue';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 export default {
   name: "ModalAddNewGroup",
   components: { NumberField, NumberList },
@@ -82,28 +84,46 @@ export default {
       }
 
       // Otherwise, make the request.
-      let phoneIncludes = [];
-      this.numbers.forEach((number) => {
-        phoneIncludes.push({
-          type: "phones",
-          attributes: {
-            number
-          }
-        })
-      });
-
-      let payload = JSON.stringify({
+      let data = {
         data: {
           type: "groups",
-          attributes: {
+          attributes:
+          {
             name: this.name
-          }
+          },
+          relationships: {
+            phones: {
+              data: []
+            }
+          },
         },
-        included: phoneIncludes
+        includes: []
+      }
+
+      let phoneIncludes = [];
+      this.numbers.forEach((number) => {
+
+        let condensedNumber = parsePhoneNumberFromString(number).number;
+
+        data.data.relationships.phones.data.push({
+          id: 0,
+          type: "phones"
+        });
+
+        data.includes.push({
+          id: 0,
+          type: "phones",
+          attributes: {
+            number: condensedNumber
+          }
+        });
+
       });
-      axios.post(`/groups`, payload)
+
+      let payload = JSON.stringify(data);
+      axios.post(`http://localhost:8088/groups`, payload)
       .then((response) => {
-        // TODO
+        let dismiss = this.$emit('close');
       })
       .catch((error) => {
         // TODO:
