@@ -1,0 +1,19 @@
+/**
+ * Collection of common styles for lists.
+ * * * * */
+
+@import 'colors';
+li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .list-content {
+    background-color: $kavi-blue;
+    border-radius: 8px;
+    color: $white;
+    font-weight: 700;
+    padding: 0 10px;
+  }
+}

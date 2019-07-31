@@ -6,6 +6,12 @@
 
 @import 'buttons';
 @import 'colors';
+@import 'lists';
+@import 'typography';
+
+html, body {
+  font-size: 10px;
+}
 
 .modal {
   display: none;
