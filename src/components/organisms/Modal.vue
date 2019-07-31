@@ -10,7 +10,10 @@
 
         <header class="modal-header">
           <p id="group-modal-title" class="modal-title">
-            <strong>Add Group(s)</strong>
+
+            <strong v-if="groups.length">Add Group(s)</strong>
+            <strong v-else>Add New Group</strong>
+
           </p>
 
           <button aria-label="Close modal" class="button button-clear" data-micromodal-close>
@@ -21,10 +24,31 @@
           </button>
         </header>
 
-        <ModalAddNewGroup @close="closeModal"/>
-        <!--
-          <ModalEditGroup />
-        -->
+        <div id="add-group-modal-content" class="modal-content">
+
+          <!-- Modal content.  The edit group options appear first, but are hidden
+            by default. -->
+          <ModalEditGroup v-if="edit"
+            :group="edit"
+            @cancel="edit = false"/>
+
+          <!-- Otherwise, we usually just have a list of pre-existing groups the
+            user can add, if they exist of course. -->
+          <ModalGroupList v-if="groups.length"
+            :adding="addNew"
+            :groups="groups"
+            @add-group="addNew = true"
+            @confirm="confirmGroups($event)"
+            @select="$emit('select', $event)"
+            @edit="edit = $event"/>
+
+          <!-- Finally, here's the part for adding a new group
+          -->
+          <ModalAddNewGroup v-if="addNew || groups.length == 0"
+            :title="groups.length"
+            @close="closeModal"/>
+
+        </div>
 
       </div>
     </div>
@@ -36,20 +60,54 @@ import axios from 'axios';
 import MicroModal from 'micromodal';
 import ModalAddNewGroup from './ModalAddNewGroup.vue';
 import ModalEditGroup from './ModalEditGroup.vue';
+import ModalGroupList from './ModalGroupList.vue';
 export default {
   name: "Modal",
-  components: { ModalAddNewGroup, ModalEditGroup },
+  components: { ModalAddNewGroup, ModalEditGroup, ModalGroupList },
+
+  data: function() {
+    return {
+      addNew: false,
+      edit: false,
+      groups: []
+    }
+  },
 
   methods: {
 
     closeModal: function() {
+      document.getElementById('add-group-modal').classList.remove('is-open');
+    },
+
+    confirmGroups: function(groups) {
+      this.$emit('groups', groups);
       document.getElementById('add-group-modal').classList.remove('is-open');
     }
 
   },
 
   mounted: function() {
+
+    // Initialize modal
     MicroModal.init();
+
+    // And go ahead and fetch groups
+    let groups = this.groups;
+    axios.get(`http://localhost:8088/groups`)
+    .then((response) => {
+
+      response.data.data.forEach((group) => {
+        groups.push({
+          id: group.id,
+          name: group.attributes.name
+        });
+      });
+
+    })
+    .catch((error) => {
+      // TODO
+    });
+
   }
 }
 </script>
@@ -75,7 +133,7 @@ export default {
 .modal-container {
   background-color: #fff;
   padding: 30px;
-  width: 80%;
+  width: 60%;
   max-height: 100vh;
   border-radius: 4px;
   overflow-y: auto;
