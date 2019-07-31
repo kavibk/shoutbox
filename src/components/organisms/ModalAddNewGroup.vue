@@ -2,36 +2,34 @@
   numbers and the like -->
 <template>
 
-  <div id="add-group-modal-content" class="modal-content">
+  <form @submit.prevent="createGroup">
 
-    <form @submit.prevent="createGroup">
+    <h5 v-if="title">Add New Group</h5>
 
-      <input type="text" placeholder="Name of group" v-model="name"/>
+    <input type="text" placeholder="Name of group" v-model="name"/>
 
-      <div class="row">
+    <div class="row">
 
-        <div class="column">
+      <div class="column">
 
-          <NumberField
-            @numbers="addNumbers($event)"/>
+        <NumberField
+          @numbers="addNumbers($event)"/>
 
-          <NumberList :numbers="numbers" />
-
-        </div>
-
-        <div class="column">
-
-          <button type="submit" class="button button-clear float-right" v-if="validGroup">
-            Save Group
-          </button>
-
-        </div>
+        <NumberList :numbers="numbers" />
 
       </div>
 
-    </form>
+      <div class="column">
 
-  </div>
+        <button type="submit" class="button button-clear float-right" v-if="validGroup">
+          Save Group
+        </button>
+
+      </div>
+
+    </div>
+
+  </form>
 
 </template>
 
@@ -42,6 +40,7 @@ import NumberList from '../molecules/NumberList.vue';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 export default {
   name: "ModalAddNewGroup",
+  props: ['title'],
   components: { NumberField, NumberList },
 
   data: function() {
@@ -123,7 +122,7 @@ export default {
       let payload = JSON.stringify(data);
       axios.post(`http://localhost:8088/groups`, payload)
       .then((response) => {
-        let dismiss = this.$emit('close');
+        this.$emit('close');
       })
       .catch((error) => {
         // TODO:
