@@ -30,13 +30,20 @@
             by default. -->
           <ModalEditGroup v-if="edit"
             :group="edit"
-            @cancel="edit = false"/>
+            @cancel="edit = false"
+            @remove-group="removeGroup($event)"
+            @transfer="startTransfer($event)"/>
+
+          <ModalTransferNumbers v-if="transfer"
+            :from-group="transfer"
+            :groups="groups"/>
 
           <!-- Otherwise, we usually just have a list of pre-existing groups the
             user can add, if they exist of course. -->
           <ModalGroupList v-if="groups.length"
             :adding="addNew"
             :groups="groups"
+            :transfer="transfer"
             @add-group="addNew = true"
             @confirm="confirmGroups($event)"
             @select="$emit('select', $event)"
@@ -61,15 +68,17 @@ import MicroModal from 'micromodal';
 import ModalAddNewGroup from './ModalAddNewGroup.vue';
 import ModalEditGroup from './ModalEditGroup.vue';
 import ModalGroupList from './ModalGroupList.vue';
+import ModalTransferNumbers from './ModalTransferNumbers.vue';
 export default {
   name: "Modal",
-  components: { ModalAddNewGroup, ModalEditGroup, ModalGroupList },
+  components: { ModalAddNewGroup, ModalEditGroup, ModalGroupList, ModalTransferNumbers },
 
   data: function() {
     return {
       addNew: false,
       edit: false,
-      groups: []
+      groups: [],
+      transfer: false,
     }
   },
 
@@ -82,6 +91,32 @@ export default {
     confirmGroups: function(groups) {
       this.$emit('groups', groups);
       document.getElementById('add-group-modal').classList.remove('is-open');
+    },
+
+    removeGroup: function(group) {
+
+      this.edit = false;
+
+      for(let i = 0; i < this.groups.length; i ++) {
+
+        if (groups[i].id == group.id) {
+          this.groups.slice(i, 1);
+          return;
+        }
+
+      }
+
+    },
+
+    // Sets up the transfer numbers section of the modal
+    startTransfer: function(payload) {
+
+      this.edit = false;
+      this.transfer = {
+        group: payload.group,
+        numbers: payload.numbers
+      };
+
     }
 
   },

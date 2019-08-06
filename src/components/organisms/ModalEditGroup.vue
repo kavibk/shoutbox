@@ -22,8 +22,8 @@
 
         <div class="column">
 
-          <button class="button button-clear float-right">
-            Transfer Numbers
+          <button class="button button-clear float-right" @click="$emit('transfer', {group, numbers: numbers.group})">
+            <i class="fas fa-arrow-right"></i> Transfer Numbers
           </button>
 
         </div>
@@ -39,15 +39,15 @@
           </span>
 
           <button type="submit" class="button button-clear float-right">
-            Save Changes
+            <i class="fas fa-save"></i> Save Changes
           </button>
 
-          <button class="button button-clear float-right float-right">
-            Delete Group
+          <button class="button button-clear float-right float-right" @click="deleteGroup">
+            <i class="fa fa-trash"></i> Delete Group
           </button>
 
           <button class="button button-clear float-right" @click="$emit('cancel')">
-            Cancel
+            <i class="fa fa-times"></i> Cancel
           </button>
 
         </div>
@@ -90,14 +90,14 @@ export default {
       let numbers = [];
       this.numbers.group.forEach((number) => {
 
-        let parsedNumber = parsePhoneNumberFromString(number.attributes.number, 'US');
+        let parsedNumber = parsePhoneNumberFromString(number.number, 'US');
         if (parsedNumber) {
           numbers.push(parsedNumber.formatInternational());
         }
 
       });
 
-      numbers.concat(this.numbers.raw);
+      numbers = numbers.concat(this.numbers.raw);
 
       return numbers;
 
@@ -107,8 +107,26 @@ export default {
 
   methods: {
 
+    // Self explanatory.  It deletes the group
+    deleteGroup: function() {
+
+      axios.delete(`http://localhost:8088/groups/${this.group.id}`)
+      .then((response) => {
+        // TODO:
+      })
+      .catch((error) => {
+
+      });
+
+      this.$emit('removeGroup', this.group);
+
+    },
+
     editGroup: function() {
 
+      // If the name changed, then go ahead and update that
+
+      // And update the numbers while you're at it.
       let groupID = this.group.id;
       this.numbers.raw.forEach((number) => {
 
@@ -143,7 +161,12 @@ export default {
     .then((response) => {
 
       let numbers = response.data.included;
-      this.numbers.group = numbers;
+      numbers.forEach((number) => {
+        this.numbers.group.push({
+          id: number.id,
+          number: number.attributes.number
+        });
+      })
 
     })
     .catch((error) => {
