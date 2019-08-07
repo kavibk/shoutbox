@@ -79,7 +79,7 @@ export default {
      // be inserted into that list item
      numberOrReserve: function(number, index) {
 
-       if (this.transfer) {
+       if (this.transfer || this.reserve === undefined || this.reserve === false) {
          return number;
        }
 
@@ -87,8 +87,6 @@ export default {
          return number;
        } else if (this.reserve !== false && this.reserve.index >= 0 && index > this.reserve) {
          return this.parsedNumbers[index - 1];
-       } else if (this.reserve === false){
-         return number;
        }
 
        return '';

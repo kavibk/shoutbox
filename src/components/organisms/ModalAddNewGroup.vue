@@ -15,7 +15,9 @@
         <NumberField
           @numbers="addNumbers($event)"/>
 
-        <NumberList :numbers="numbers" />
+        <NumberList
+          :numbers="numbers"
+          :reserve="false"/>
 
       </div>
 
