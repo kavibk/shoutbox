@@ -98,7 +98,7 @@ export default {
             }
           },
         },
-        includes: []
+        included: []
       }
 
       let phoneIncludes = [];
@@ -107,12 +107,12 @@ export default {
         let condensedNumber = parsePhoneNumberFromString(number).number;
 
         data.data.relationships.phones.data.push({
-          id: 0,
+          id: condensedNumber,
           type: "phones"
         });
 
-        data.includes.push({
-          id: 0,
+        data.included.push({
+          id: condensedNumber,
           type: "phones",
           attributes: {
             number: condensedNumber
