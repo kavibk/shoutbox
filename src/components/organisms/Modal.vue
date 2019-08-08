@@ -16,7 +16,9 @@
 
           </p>
 
-          <button aria-label="Close modal" class="button button-clear" data-micromodal-close>
+          <button aria-label="Close modal" class="button button-clear padding-0-right"
+            data-micromodal-close
+            @click="closeModal">
             <strong>
               <i class="fas fa-times-circle"></i>
               Close

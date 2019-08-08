@@ -1,61 +1,64 @@
 <template>
   <div id="app">
 
-    <Modal
-      @groups="addGroups($event)"/>
+    <div>
 
-    <header class="brand">
-      <img alt="KAVI Logo" src="./assets/KAVI_logo_black.png"/>
-      <h1>Shoutbox</h1>
-    </header>
+      <Modal
+        @groups="addGroups($event)"/>
 
-    <div class="container">
+      <header class="brand">
+        <img alt="KAVI Logo" src="./assets/KAVI_logo_black.png"/>
+        <h1>Shoutbox</h1>
+      </header>
 
-      <ShoutForm v-model="message"/>
+      <div class="container">
 
-      <div class="row">
+        <ShoutForm v-model="message"/>
 
-        <div class="column">
-          <NumberField
-            @numbers="numbers = $event"/>
+        <div class="row">
+
+          <div class="column">
+            <NumberField
+              @numbers="numbers = $event"/>
+          </div>
+
+          <div class="column">
+            <button class="button button-clear padding-0-left" data-micromodal-trigger="add-group-modal">
+              Add Group
+            </button>
+          </div>
+
         </div>
 
-        <div class="column">
-          <button class="button button-clear padding-0-left" data-micromodal-trigger="add-group-modal">
-            Add Group
-          </button>
+        <div class="row">
+
+          <div class="column">
+            <NumberList :numbers="numbers" />
+          </div>
+
+          <div class="column">
+
+            <GroupList
+              :groups="groups"
+              :selected="groups"
+              :selectable="false"
+              :removeable="true"
+              :editable="false"
+              @un-select="removeGroup($event)"/>
+
+          </div>
+
         </div>
+
+        <button class="button shout-button" v-if="message != '' && numbers.length || groups.length"
+          @click="shout">
+          Shout
+        </button>
 
       </div>
-
-      <div class="row">
-
-        <div class="column">
-          <NumberList :numbers="numbers" />
-        </div>
-
-        <div class="column">
-
-          <GroupList
-            :groups="groups"
-            :selected="groups"
-            :selectable="false"
-            :removeable="true"
-            :editable="false"
-            @un-select="removeGroup($event)"/>
-
-        </div>
-
-      </div>
-
-      <button class="button shout-button" v-if="message != '' && numbers.length || groups.length"
-        @click="shout">
-        Shout
-      </button>
 
     </div>
-
-
+    
   </div>
 </template>
 

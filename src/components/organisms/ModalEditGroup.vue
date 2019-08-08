@@ -1,60 +1,56 @@
 <!-- Modal content for editing a pre-existing group -->
 <template>
 
-  <div id="edit-group-modal-content" class="modal-content">
+  <form @submit.prevent="editGroup">
 
-    <form @submit.prevent="editGroup">
+    <h5>Edit Group </h5>
 
-      <h5>Edit Group </h5>
+    <input type="text" placeholder="Name of group" v-model="name"/>
 
-      <input type="text" placeholder="Name of group" v-model="name"/>
+    <div class="row">
 
-      <div class="row">
+      <div class="column">
 
-        <div class="column">
+        <NumberField
+          @numbers="numbers.raw = $event"/>
 
-          <NumberField
-            @numbers="numbers.raw = $event"/>
-
-          <NumberList :numbers="parsedNumbers" />
-
-        </div>
-
-        <div class="column">
-
-          <button class="button button-clear float-right" @click="$emit('transfer', {group, numbers: numbers.group})">
-            <i class="fas fa-arrow-right"></i> Transfer Numbers
-          </button>
-
-        </div>
+        <NumberList :numbers="parsedNumbers" />
 
       </div>
 
-      <div class="control-row">
+      <div class="column">
 
-        <p>
-          {{ parsedNumbers.length }} numbers in total
-        </p>
-
-        <div>
-          <button type="submit" class="button button-clear float-right">
-            <i class="fas fa-save"></i> Save Changes
-          </button>
-
-          <button class="button button-clear float-right float-right" @click="deleteGroup">
-            <i class="fa fa-trash"></i> Delete Group
-          </button>
-
-          <button class="button button-clear float-right" @click="$emit('cancel')">
-            <i class="fa fa-times"></i> Cancel
-          </button>
-        </div>
+        <button class="button button-clear float-right padding-0-right" @click="$emit('transfer', {group, numbers: numbers.group})">
+          <i class="fas fa-arrow-right"></i> Transfer Numbers
+        </button>
 
       </div>
 
-    </form>
+    </div>
 
-  </div>
+    <div class="control-row">
+
+      <p>
+        {{ parsedNumbers.length }} numbers in total
+      </p>
+
+      <div>
+        <button type="submit" class="button button-clear float-right padding-0-right">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+
+        <button class="button button-clear float-right" @click="deleteGroup">
+          <i class="fa fa-trash"></i> Delete Group
+        </button>
+
+        <button class="button button-clear float-right" @click="$emit('cancel')">
+          <i class="fa fa-times"></i> Cancel
+        </button>
+      </div>
+
+    </div>
+
+  </form>
 
 </template>
 
