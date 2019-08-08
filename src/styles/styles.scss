@@ -46,3 +46,11 @@ html, body {
     width: 100%;
   }
 }
+
+input[type="text"], textarea {
+
+  &:focus {
+    border: 1px solid $kavi-orange-dark;
+  }
+
+}

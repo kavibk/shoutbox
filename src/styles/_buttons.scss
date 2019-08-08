@@ -9,6 +9,12 @@
   border-color: $kavi-blue;
   color: $white;
 
+  &:hover {
+    background-color: $kavi-orange;
+    border-color: $kavi-orange;
+    color: $white;
+  }
+
   &.padding-0-top {
     padding-top: 0;
   }
