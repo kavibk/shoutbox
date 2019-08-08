@@ -40,6 +40,33 @@ export default {
 
 	methods: {
 
+		// Adds the group to the list of selected groups, but also fetches any
+		// numbers associated with it behind the scenes.
+		select: function(group) {
+
+			this.selected.push(group);
+
+			axios.get(`http://localhost:8088/groups/${group.id}`)
+			.then((response) => {
+
+				let numbers = [];
+				response.included.forEach((number) => {
+					numbers.push({
+						id: number.id,
+						number: number.attributes.number
+					})
+				});
+
+				group.numbers = numbers;
+
+			})
+			.catch((error) => {
+				// TODO
+			});
+
+		},
+
+		// Unselects a group from the list, naturally
 		unselect: function(group) {
 
 			for(let i = 0; i < this.selected.length; i ++) {

@@ -46,7 +46,6 @@
             :transfer="transfer"
             @add-group="addNew = true"
             @confirm="confirmGroups($event)"
-            @select="$emit('select', $event)"
             @edit="edit = $event"/>
 
           <!-- Finally, here's the part for adding a new group

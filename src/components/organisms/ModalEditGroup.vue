@@ -30,14 +30,13 @@
 
       </div>
 
-      <div class="row">
+      <div class="control-row">
 
-        <div class="column">
+        <p>
+          {{ parsedNumbers.length }} numbers in total
+        </p>
 
-          <span>
-            {{ parsedNumbers.length }} numbers in total
-          </span>
-
+        <div>
           <button type="submit" class="button button-clear float-right">
             <i class="fas fa-save"></i> Save Changes
           </button>
@@ -49,8 +48,8 @@
           <button class="button button-clear float-right" @click="$emit('cancel')">
             <i class="fa fa-times"></i> Cancel
           </button>
-
         </div>
+
       </div>
 
     </form>
@@ -177,3 +176,18 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+.control-row {
+  display: flex;
+  align-items: center;
+
+  * {
+    margin: 0;
+  }
+
+  p {
+    flex-grow: 1;
+  }
+}
+</style>

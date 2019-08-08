@@ -10,7 +10,8 @@
     </header>
 
     <div class="container">
-      <ShoutForm />
+
+      <ShoutForm v-model="message"/>
 
       <div class="row">
 
@@ -20,7 +21,7 @@
         </div>
 
         <div class="column">
-          <button class="button button-clear" data-micromodal-trigger="add-group-modal">
+          <button class="button button-clear padding-0-left" data-micromodal-trigger="add-group-modal">
             Add Group
           </button>
         </div>
@@ -42,12 +43,19 @@
             :removeable="true"
             :editable="false"
             @un-select="removeGroup($event)"/>
-            
+
         </div>
 
       </div>
 
+      <button class="button shout-button" v-if="message != '' && numbers.length || groups.length"
+        @click="shout">
+        Shout
+      </button>
+
     </div>
+
+
   </div>
 </template>
 
@@ -69,6 +77,7 @@ export default {
 
   data: function() {
     return {
+      message: '',
       groups: [],
       numbers: []
     }
@@ -103,6 +112,10 @@ export default {
           return;
         }
       }
+
+    },
+
+    shout: function() {
 
     }
 

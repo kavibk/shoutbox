@@ -1,6 +1,11 @@
+@import 'colors';
 
 p, li, .button, input, textarea {
 	font-size: 1.4rem;
+}
+
+p, li, input, textarea, h1, h2, h3, h4, h5, h6{
+	color: $black;
 }
 
 .button {
@@ -9,4 +14,8 @@ p, li, .button, input, textarea {
 
 .button-clear {
 	font-weight: 700;
+}
+
+a, .button.button-clear {
+	color: $kavi-orange;
 }

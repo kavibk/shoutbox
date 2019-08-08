@@ -8,4 +8,27 @@
   background-color: $kavi-blue;
   border-color: $kavi-blue;
   color: $white;
+
+  &.margin-0-top {
+    margin-top: 0;
+  }
+
+  &.margin-0-right {
+    margin-right: 0;
+  }
+
+  &.margin-0-bottom {
+    margin-bottom: 0;
+  }
+
+  &.padding-0-left {
+    padding-left: 0;
+  }
+
+}
+
+.shout-button {
+  background-color: $kavi-orange;
+  border-color: $kavi-orange;
+  width: 100%;
 }
