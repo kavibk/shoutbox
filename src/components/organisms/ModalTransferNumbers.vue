@@ -8,11 +8,27 @@
 
 			<div class="column">
 
-				<GroupListItem
-					:group="fromGroup.group"
-					:selected="true"/>
+				<GroupListItem v-if="fromGroup"
+					:group="fromGroup"
+					:removeable="true"
+					:selected="true"
+					@un-select="fromGroup = false"/>
 
-				<NumberList
+				<div v-else>
+
+					<h6>Select Group For Transfer</h6>
+
+					<GroupList
+						:groups="groups"
+						:selectable="true"
+						:removable="false"
+						:editable="false"
+						@select="fromGroup = $event"/>
+
+				</div>
+
+				<Loader v-if="loadingFrom" class="slight-padding-vertical"/>
+				<NumberList v-else
 					:numbers="parsedFromNumbers"
 					:selectable="toGroup"
 					:transfer="transferFrom"
@@ -44,7 +60,8 @@
 						:selected="true"
 						@un-select="toGroup = false"/>
 
-					<NumberList
+					<Loader v-if="loadingTo" />
+					<NumberList v-else
 						:numbers="parsedToNumbers"
 						:selectable="true"
 						:transfer="transferTo"
@@ -58,6 +75,11 @@
 
 		</div>
 
+		<div class="button button-clear float-right padding-0-right"
+			@click="$emit('cancel')">
+			<i class="fa fa-times"></i> Cancel
+		</div>
+
 	</div>
 
 </template>
@@ -66,20 +88,25 @@
 import axios from 'axios';
 import GroupList from '../molecules/GroupList.vue';
 import GroupListItem from '../atoms/GroupListItem.vue';
+import Loader from '../atoms/Loader.vue';
 import NumberList from '../molecules/NumberList.vue';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 export default {
 	name: "ModalTransferNumbers",
-	props: ['from-group', 'groups'],
-	components: { GroupList, GroupListItem, NumberList },
+	props: ['initial-from', 'groups'],
+	components: { GroupList, GroupListItem, Loader, NumberList },
 
 	data: function() {
 		return {
+			fromGroup: this.initialFrom.group,
+			fromNumbers: this.initialFrom.numbers,
+			loadingFrom: false,
+			loadingTo: false,
+			reserve: false,
 			toGroup: false,
 			toNumbers: false,
 			transferTo: false,
-			transferFrom: false,
-			reserve: false
+			transferFrom: false
 		}
 	},
 
@@ -92,7 +119,7 @@ export default {
 			if (this.fromGroup) {
 
 				let transferNum = this.transfer;
-				this.fromGroup.numbers.forEach((number) => {
+				this.fromNumbers.forEach((number) => {
 
 					if (number == transferNum) {
 						numbers.push('transfer');
@@ -198,14 +225,44 @@ export default {
 
 	watch: {
 
+		fromGroup: function() {
+
+			if (this.fromGroup.id) {
+
+				this.loadingFrom = true;
+
+				axios.get(`http://localhost:8088/groups/${this.fromGroup.id}`)
+				.then((response) => {
+
+					this.loadingFrom = false;
+
+					let numbers = [];
+					let included = response.data.included;
+					included.forEach((number) => {
+
+						console.log(number);
+						numbers.push({
+							id: number.id,
+							number: number.attributes.number
+						});
+					});
+
+					this.fromNumbers = numbers;
+
+				});
+			}
+		},
+
 		// Fetches numbers for that group anytime it changes
 		toGroup: function() {
 
-			let _this = this;
 			if (this.toGroup.id) {
 
+				this.loadingTo = true;
 				axios.get(`http://localhost:8088/groups/${this.toGroup.id}`)
 				.then((response) => {
+
+					this.loadingTo = false;
 
 					// Alright, we have our numbers
 					let numbers = [];
@@ -219,7 +276,7 @@ export default {
 						});
 					});
 
-					_this.toNumbers = numbers;
+					this.toNumbers = numbers;
 
 				})
 				.catch((error) => {

@@ -50,7 +50,14 @@
 
         </div>
 
-        <button class="button shout-button" v-if="message != '' && numbers.length || groups.length"
+        <Loader class="center" v-if="sending" />
+
+        <button class="button button-clear centered" v-else-if="sent" @click="sent = false;">
+          <i class="fa fa-check"/>
+          <i class="fa fa-refresh"/>
+        </button>
+
+        <button class="button shout-button" v-else-if="message != '' && numbers.length || groups.length"
           @click="shout">
           Shout
         </button>
@@ -58,12 +65,13 @@
       </div>
 
     </div>
-    
+
   </div>
 </template>
 
 <script>
 import GroupList from './components/molecules/GroupList.vue';
+import Loader from './components/atoms/Loader.vue';
 import Modal from './components/organisms/Modal.vue';
 import NumberField from './components/molecules/NumberField.vue';
 import NumberList from './components/molecules/NumberList.vue';
@@ -72,6 +80,7 @@ export default {
   name: 'app',
   components: {
     GroupList,
+    Loader,
     Modal,
     NumberField,
     NumberList,
@@ -82,7 +91,9 @@ export default {
     return {
       message: '',
       groups: [],
-      numbers: []
+      numbers: [],
+      sending: false,
+      sent: false
     }
   },
 
@@ -119,6 +130,70 @@ export default {
     },
 
     shout: function() {
+
+      this.sending = true;
+
+      let payload = {
+        data: {
+          body: this.message,
+          relationships: {
+            phones: {
+              data: []
+            },
+            groups: {
+              data: []
+            }
+          }
+        },
+        included: []
+      }
+
+      this.groups.forEach((group) => {
+
+        payload.data.relationships.groups.data.push({
+          id: group.id,
+          type: "groups"
+        });
+
+        payload.included.push({
+          id: group.id,
+          type: "groups",
+          attributes: {
+            name: group.name
+          }
+        });
+
+      });
+
+      this.numbers.forEach((number) => {
+
+        payload.data.relationships.phones.data.push({
+          id: number,
+          type: "phones"
+        });
+
+        payload.included.push({
+          id: number,
+          type: "phones",
+          attributes: {
+            number
+          }
+        });
+
+      });
+
+      let data = JSON.stringify(payload);
+
+      axios.post(`http://localhost:8088/shout`, data)
+      .then((response) => {
+
+        this.sending = false;
+        this.sent = true;
+
+      })
+      .catch((error) => {
+        // TODO
+      });
 
     }
 

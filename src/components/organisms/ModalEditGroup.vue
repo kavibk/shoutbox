@@ -14,7 +14,9 @@
         <NumberField
           @numbers="numbers.raw = $event"/>
 
-        <NumberList :numbers="parsedNumbers" />
+        <Loader v-if="loading" class="slight-padding-vertical"/>
+
+        <NumberList :numbers="parsedNumbers" v-else />
 
       </div>
 
@@ -30,7 +32,8 @@
 
     <div class="control-row">
 
-      <p>
+      <p v-if="loading">Fetching numbers...</p>
+      <p v-else>
         {{ parsedNumbers.length }} numbers in total
       </p>
 
@@ -56,16 +59,18 @@
 
 <script>
 import axios from 'axios';
+import Loader from '../atoms/Loader.vue';
 import NumberField from '../molecules/NumberField.vue';
 import NumberList from '../molecules/NumberList.vue';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 export default {
   name: "ModalEditGroup",
   props: ['group'],
-  components: { NumberField, NumberList },
+  components: { Loader, NumberField, NumberList },
 
   data: function() {
     return {
+      loading: false,
       name: this.group.name,
       numbers: {
         raw: [],
@@ -152,9 +157,11 @@ export default {
   // We need to get the numbers for this group once we mount the modal
   mounted: function() {
 
+    this.loading = true;
     axios.get(`http://localhost:8088/groups/${this.group.id}`)
     .then((response) => {
 
+      this.loading = false;
       let numbers = response.data.included;
       numbers.forEach((number) => {
         this.numbers.group.push({

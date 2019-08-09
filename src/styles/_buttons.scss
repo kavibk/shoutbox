@@ -31,6 +31,11 @@
     padding-left: 0;
   }
 
+  &.centered {
+    display: block;
+    margin: 0 auto;
+  }
+
 }
 
 .shout-button {

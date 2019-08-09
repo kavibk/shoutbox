@@ -37,12 +37,13 @@
             @transfer="startTransfer($event)"/>
 
           <ModalTransferNumbers v-if="transfer"
-            :from-group="transfer"
+            @cancel="transfer=false"
+            :initial-from="transfer"
             :groups="groups"/>
 
           <!-- Otherwise, we usually just have a list of pre-existing groups the
             user can add, if they exist of course. -->
-          <ModalGroupList v-if="groups.length"
+          <ModalGroupList v-if="groups.length && !transfer || addNew"
             :adding="addNew"
             :groups="groups"
             :transfer="transfer"
