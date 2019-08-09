@@ -23,9 +23,19 @@
 
       <div class="column">
 
-        <button type="submit" class="button button-clear float-right" v-if="validGroup">
-          Save Group
-        </button>
+        <div class="float-right">
+
+          <button type="button" class="button button-clear"
+            :class="{'padding-0-right': !validGroup}"
+            @click="$emit('cancel')">
+            <i class="fa fa-times"></i> Cancel
+          </button>
+
+          <button type="submit" class="button button-clear padding-0-right" v-if="validGroup">
+            <i class="fa fa-save"></i> Save Group
+          </button>
+
+        </div>
 
       </div>
 
@@ -124,7 +134,10 @@ export default {
       let payload = JSON.stringify(data);
       axios.post(`http://localhost:8088/groups`, payload)
       .then((response) => {
-        this.$emit('close');
+        this.$emit('done', {
+          id: response.data.data.id,
+          name: response.data.data.attributes.name
+        });
       })
       .catch((error) => {
         // TODO:

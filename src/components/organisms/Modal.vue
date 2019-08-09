@@ -43,11 +43,11 @@
 
           <!-- Otherwise, we usually just have a list of pre-existing groups the
             user can add, if they exist of course. -->
-          <ModalGroupList v-if="groups.length && !transfer || addNew"
+          <ModalGroupList v-if="groups.length && (!transfer && !addNew && !edit)"
             :adding="addNew"
             :groups="groups"
             :transfer="transfer"
-            @add-group="addNew = true"
+            @add-group="addNew = true; edit = false; transfer = false;"
             @confirm="confirmGroups($event)"
             @edit="edit = $event"/>
 
@@ -55,7 +55,8 @@
           -->
           <ModalAddNewGroup v-if="addNew || groups.length == 0"
             :title="groups.length"
-            @close="closeModal"/>
+            @cancel="handleAddNewCancel"
+            @done="groups.push($event); addNew = false"/>
 
         </div>
 
@@ -93,6 +94,21 @@ export default {
     confirmGroups: function(groups) {
       this.$emit('groups', groups);
       document.getElementById('add-group-modal').classList.remove('is-open');
+    },
+
+    // A cancel event from the add new section of the modal isn't so
+    // straight-forward.  If we haven't created any groups yet, then we need to
+    // close the modal.  Otherwise, we can keep it open and just simply un-toggle
+    // the addNew flag
+    handleAddNewCancel: function() {
+
+      this.addNew = false;
+
+      // No groups?  Close the modal
+      if (this.groups.length <= 0) {
+        document.getElementById('add-group-modal').classList.remove('is-open');
+      }
+
     },
 
     removeGroup: function(group) {
