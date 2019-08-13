@@ -117,8 +117,8 @@ export default {
 
       for(let i = 0; i < this.groups.length; i ++) {
 
-        if (groups[i].id == group.id) {
-          this.groups.slice(i, 1);
+        if (this.groups[i].id == group.id) {
+          this.groups.splice(i, 1);
           return;
         }
 

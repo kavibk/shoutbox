@@ -112,13 +112,14 @@ export default {
 
       axios.delete(`http://localhost:8088/groups/${this.group.id}`)
       .then((response) => {
-        // TODO:
+        // Do nothing actually.  We automatically assume that the request will
+        // be successful
       })
       .catch((error) => {
 
       });
 
-      this.$emit('removeGroup', this.group);
+      this.$emit('remove-group', this.group);
 
     },
 
