@@ -136,7 +136,10 @@ export default {
 
       let payload = {
         data: {
-          body: this.message,
+          type: "shout",
+          attributes: {
+            body: this.message,
+          }
           relationships: {
             phones: {
               data: []
