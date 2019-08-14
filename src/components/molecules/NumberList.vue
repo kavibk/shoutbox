@@ -6,12 +6,12 @@
     <NumberListItem v-for="(number, index) in parsedNumbers"
       :number="numberOrReserve(number, index)"
       :transfer="number == transfer"
-      :reserve="index === reserve.index && !transfer ? reserve : false"
+      :reserve="reserve && index === reserve.index && !transfer ? reserve : false"
       :selectable="selectable"
       @select="$emit('select', $event)"
       @transfer="$emit('transfer', $event)"/>
 
-    <NumberListItem v-if="reserve.index >= 0 && !transfer"
+    <NumberListItem v-if="reserve && reserve.index >= 0 && !transfer"
       :number="tailNumber"
       :reserve="tailReserve"
       @transfer="$emit('transfer', $event)"/>
