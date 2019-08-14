@@ -139,7 +139,7 @@ export default {
           type: "shout",
           attributes: {
             body: this.message,
-          }
+          },
           relationships: {
             phones: {
               data: []
