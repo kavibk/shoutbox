@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import GroupList from './components/molecules/GroupList.vue';
 import Loader from './components/atoms/Loader.vue';
 import Modal from './components/organisms/Modal.vue';
