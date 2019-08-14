@@ -46,7 +46,7 @@ export default {
 
 			this.selected.push(group);
 
-			axios.get(`http://localhost:8088/groups/${group.id}`)
+			axios.get(`${process.env.VUE_APP_ENDPOINT}/groups/${group.id}`)
 			.then((response) => {
 
 				let numbers = [];

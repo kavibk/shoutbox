@@ -132,7 +132,7 @@ export default {
       });
 
       let payload = JSON.stringify(data);
-      axios.post(`http://localhost:8088/groups`, payload)
+      axios.post(`${process.env.VUE_APP_ENDPOINT}/groups`, payload)
       .then((response) => {
         this.$emit('done', {
           id: response.data.data.id,

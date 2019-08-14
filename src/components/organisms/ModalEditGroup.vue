@@ -110,7 +110,7 @@ export default {
     // Self explanatory.  It deletes the group
     deleteGroup: function() {
 
-      axios.delete(`http://localhost:8088/groups/${this.group.id}`)
+      axios.delete(`${process.env.VUE_APP_ENDPOINT}/groups/${this.group.id}`)
       .then((response) => {
         // Do nothing actually.  We automatically assume that the request will
         // be successful
@@ -142,7 +142,7 @@ export default {
           }
         });
 
-        axios.post(`http://localhost:8088/groups/${groupID}/phones`, payload)
+        axios.post(`${process.env.VUE_APP_ENDPOINT}/groups/${groupID}/phones`, payload)
         .then((response) => {
 
         })
@@ -159,7 +159,7 @@ export default {
   mounted: function() {
 
     this.loading = true;
-    axios.get(`http://localhost:8088/groups/${this.group.id}`)
+    axios.get(`${process.env.VUE_APP_ENDPOINT}/groups/${this.group.id}`)
     .then((response) => {
 
       this.loading = false;

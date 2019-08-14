@@ -146,7 +146,8 @@ export default {
 
     // And go ahead and fetch groups
     let groups = this.groups;
-    axios.get(`http://localhost:8088/groups`)
+    console.log(process.env.VUE_APP_ENDPOINT);
+    axios.get(`${process.env.VUE_APP_ENDPOINT}/groups`)
     .then((response) => {
 
       response.data.data.forEach((group) => {

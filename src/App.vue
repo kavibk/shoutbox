@@ -184,7 +184,7 @@ export default {
 
       let data = JSON.stringify(payload);
 
-      axios.post(`http://localhost:8088/shout`, data)
+      axios.post(`${process.env.VUE_APP_ENDPOINT}/shout`, data)
       .then((response) => {
 
         this.sending = false;

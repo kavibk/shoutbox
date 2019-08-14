@@ -199,7 +199,7 @@ export default {
 		// we take this to mean that we are transfering a number to that group.
 		startTransferFrom: function(number) {
 
-			axios.put(`http://localhost:8088/phones/${number.id}/from/${this.toGroup.id}/to/${this.fromGroup.group.id}`)
+			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.toGroup.id}/to/${this.fromGroup.group.id}`)
 			.then((response) => {
 				// TODO:
 			})
@@ -211,7 +211,7 @@ export default {
 
 		startTransferTo: function(number) {
 
-			axios.put(`http://localhost:8088/phones/${number.id}/from/${this.fromGroup.group.id}/to/${this.toGroup.id}`)
+			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.fromGroup.group.id}/to/${this.toGroup.id}`)
 			.then((response) => {
 				// TODO
 			})
@@ -231,7 +231,7 @@ export default {
 
 				this.loadingFrom = true;
 
-				axios.get(`http://localhost:8088/groups/${this.fromGroup.id}`)
+				axios.get(`${process.env.VUE_APP_ENDPOINT}/groups/${this.fromGroup.id}`)
 				.then((response) => {
 
 					this.loadingFrom = false;
@@ -259,7 +259,7 @@ export default {
 			if (this.toGroup.id) {
 
 				this.loadingTo = true;
-				axios.get(`http://localhost:8088/groups/${this.toGroup.id}`)
+				axios.get(`${process.env.VUE_APP_ENDPOINT}/groups/${this.toGroup.id}`)
 				.then((response) => {
 
 					this.loadingTo = false;
