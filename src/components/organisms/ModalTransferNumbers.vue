@@ -168,7 +168,7 @@ export default {
 
 			let numbers;
 			if (side == 'from') {
-				numbers = this.fromGroup.numbers;
+				numbers = this.fromNumbers;
 			} else if (side == 'to') {
 				numbers = this.toNumbers;
 			}
@@ -199,7 +199,7 @@ export default {
 		// we take this to mean that we are transfering a number to that group.
 		startTransferFrom: function(number) {
 
-			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.toGroup.id}/to/${this.fromGroup.group.id}`)
+			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.toGroup.id}/to/${this.fromGroup.id}`)
 			.then((response) => {
 				// TODO:
 			})
@@ -211,7 +211,7 @@ export default {
 
 		startTransferTo: function(number) {
 
-			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.fromGroup.group.id}/to/${this.toGroup.id}`)
+			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.fromGroup.id}/to/${this.toGroup.id}`)
 			.then((response) => {
 				// TODO
 			})

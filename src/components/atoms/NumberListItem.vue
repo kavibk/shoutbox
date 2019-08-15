@@ -4,8 +4,9 @@
 <template>
   <li>
 
-    <div class="list-content reserve" v-if="reserve"
-      @click="$emit('transfer', reserve.number)">
+    <div class="list-content reserve"
+      v-if="typeof number == 'object' && transfer === false"
+      @click="$emit('transfer', number.number)">
       Transfer
     </div>
 
@@ -20,7 +21,7 @@
 <script>
 export default {
   name: "NumberListItem",
-  props: ['number', 'duplicate', 'selectable', 'transfer', 'reserve']
+  props: ['number', 'duplicate', 'selectable', 'transfer', 'transfering']
 }
 </script>
 

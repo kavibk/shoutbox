@@ -11,25 +11,26 @@ export default {
 <style lang="scss" scoped>
 @import '../../styles/colors.scss';
 .loader,
-
+.loader:before,
 .loader:after {
   border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1s infinite ease-in-out;
+  animation: load7 1s infinite ease-in-out;
 }
 .loader {
-  font-size: 1rem;
+  color: $kavi-blue;
+  font-size: 0.75rem;
   position: relative;
   text-indent: -9999em;
-  border-top: 0.2rem solid $kavi-blue;
-  border-right: 0.2rem solid $kavi-blue;
-  border-bottom: 0.2rem solid $kavi-blue;
-  border-left: 0.2rem solid $white;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
-  -webkit-animation: load8 1.1s infinite linear;
-  animation: load8 1.1s infinite linear;
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
 
 	&.center {
 		margin: 0 auto;
@@ -39,24 +40,38 @@ export default {
 		margin: 1rem 0;
 	}
 }
-@-webkit-keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
+.loader:before,
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
   100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
   }
 }
-@keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
+@keyframes load7 {
+  0%,
+  80%,
   100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
   }
 }
 </style>

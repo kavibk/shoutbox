@@ -3,17 +3,11 @@
 <template>
   <ul>
 
-    <NumberListItem v-for="(number, index) in parsedNumbers"
-      :number="numberOrReserve(number, index)"
+    <NumberListItem v-for="number in parsedNumbers"
+      :number="number"
       :transfer="number == transfer"
-      :reserve="reserve && index === reserve.index && !transfer ? reserve : false"
       :selectable="selectable"
       @select="$emit('select', $event)"
-      @transfer="$emit('transfer', $event)"/>
-
-    <NumberListItem v-if="reserve && reserve.index >= 0 && !transfer"
-      :number="tailNumber"
-      :reserve="tailReserve"
       @transfer="$emit('transfer', $event)"/>
 
   </ul>
@@ -24,7 +18,7 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import NumberListItem from '../atoms/NumberListItem.vue';
 export default {
   name: "NumberList",
-  props: ['numbers', 'selectable', 'transfer', 'reserve'],
+  props: ['numbers', 'selectable', 'transfer', 'transfering', 'reserve'],
   components: {
     NumberListItem
   },
@@ -32,39 +26,41 @@ export default {
   computed: {
 
     // Takes numbers prop and formats each number within to look like an
-    // "international style" number.  Returns formatted numbers
+    // "international style" number.  Additionally, fits in "reserved spots"
+    // for number transfers.  Returns array of formatted number strings mixed
+    // with objects for transfers
     parsedNumbers: function() {
 
       let numbers = [];
 
-      this.numbers.forEach((number) => {
-        const phoneNumber = parsePhoneNumberFromString(number);
-        numbers.push(
-          phoneNumber.format('INTERNATIONAL')
-        )
-      });
+      for(let i = 0; i < this.numbers.length; i ++) {
+
+        let number = this.numbers[i];
+
+        if (this.reserve && i === this.reserve.index && number != this.transfer) {
+
+          if (numbers[numbers.length -1] != this.reserve) {
+            numbers.push(this.reserve);
+            i --;
+          }
+
+        } else {
+
+          const phoneNumber = parsePhoneNumberFromString(number);
+          numbers.push(
+            phoneNumber.format('INTERNATIONAL')
+          );
+
+        }
+
+      }
+
+      // We may have some leftover reserved spots.  Just put them on the end
+      if (this.reserve && this.reserve.index >= this.numbers.length) {
+        numbers.push(this.reserve);
+      }
 
       return numbers;
-
-    },
-
-    tailNumber: function() {
-
-      if (this.reserve > this.numbers.length) {
-        return false;
-      }
-
-      return this.parsedNumbers[this.parsedNumbers.length - 1];
-
-    },
-
-    tailReserve: function() {
-
-      if (this.reserve > this.numbers.length || this.reserve !== false && this.numbers.length == 0) {
-        return this.reserve;
-      }
-
-      return false;
 
     }
 
@@ -79,13 +75,23 @@ export default {
      // be inserted into that list item
      numberOrReserve: function(number, index) {
 
-       if (this.transfer || this.reserve === undefined || this.reserve === false) {
+       // The base case is that this list doesn't have any reserved spots at all
+       // in which case, just return the number
+       if (this.reserve === undefined || this.reserve === false) {
          return number;
        }
 
+       // Otherwise, suppose we do need to reserve a spot, but we haven't
+       // reached the point we'd like to reserve yet?  Again, just return the
+       // number
        if (this.reserve !== false && this.reserve.index >= 0 && index < this.reserve) {
          return number;
-       } else if (this.reserve !== false && this.reserve.index >= 0 && index > this.reserve) {
+       }
+
+       // Finally, let's say that we have a spot we'd like to reserve, and we
+       // have reached the point where it has been inserted, as indicated by
+       //
+       if (this.reserve !== false && this.reserve.index >= 0 && index > this.reserve) {
          return this.parsedNumbers[index - 1];
        }
 
