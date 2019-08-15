@@ -172,12 +172,12 @@ export default {
       this.numbers.forEach((number) => {
 
         payload.data.relationships.phones.data.push({
-          id: 0,
+          id: "0",
           type: "phones"
         });
 
         payload.included.push({
-          id: 0,
+          id: "0",
           type: "phones",
           attributes: {
             number
