@@ -52,9 +52,11 @@
 
         <Loader class="center" v-if="sending" />
 
-        <button class="button button-clear centered" v-else-if="sent" @click="sent = false;">
+        <button class="button button-clear centered" v-else-if="sent" @click="reset">
           <i class="fa fa-check"/>
+          Sent
           <i class="fa fa-refresh"/>
+          Refresh?
         </button>
 
         <button class="button shout-button" v-else-if="message != '' && numbers.length || groups.length"
@@ -128,6 +130,13 @@ export default {
         }
       }
 
+    },
+
+    reset: function() {
+      this.numbers = [];
+      this.groups = [];
+      this.message = '';
+      this.sent = false;
     },
 
     shout: function() {
