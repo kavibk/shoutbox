@@ -17,6 +17,11 @@
     <div class="list-content" :class="{selectable, transfer}" v-else
       @click="selectable ? $emit('select', number) : ''">
       {{ number }}
+
+      <a href="#" v-if="removeable" @click.prevent="$emit('remove', number)">
+        <i class="fa fa-times"/>
+      </a>
+
     </div>
 
   </li>
@@ -26,7 +31,7 @@
 import Loader from './Loader.vue';
 export default {
   name: "NumberListItem",
-  props: ['number', 'duplicate', 'selectable', 'transfer', 'transfering'],
+  props: ['number', 'duplicate', 'removeable', 'selectable', 'transfer', 'transfering'],
   components: { Loader }
 }
 </script>

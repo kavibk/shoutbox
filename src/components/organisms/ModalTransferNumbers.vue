@@ -172,6 +172,13 @@ export default {
 		// think of this as "priming" a transfer
 		startTransfer: function(side, transferNum) {
 
+			// Firstly, this method doubles as a toggle.  If transfer num already
+			// equals transferFrom or transferTo, then we back away
+			if (this.transferForm == transferNum || this.transferTo == transferNum) {
+				this.transferFrom = false;
+				this.transferTo = false;
+			}
+
 			let numbers;
 
 			// First, which side did this come from?  We'll want to pick numbers from

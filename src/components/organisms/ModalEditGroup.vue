@@ -16,7 +16,10 @@
 
         <Loader v-if="loading" class="slight-padding-vertical"/>
 
-        <NumberList :numbers="parsedNumbers" v-else />
+        <NumberList v-else
+          :numbers="parsedNumbers"
+          :removeable="true"
+          @remove="deleteNumber"/>
 
       </div>
 
@@ -124,6 +127,44 @@ export default {
 
     },
 
+    // Removes a number from view of this modal and, if it's been saved, also
+    // removes it's association from this group
+    deleteNumber: function(number) {
+
+      if (this.numbers.raw.includes(number)) {
+
+        for (let i = 0; i < this.numbers.raw.length; i ++) {
+          if (this.numbers.raw[i] == number) {
+            this.numbers.raw.splice(i, 1);
+            return;
+          }
+        }
+
+      } else {
+
+        // Okay, presumably the number was saved all along, but we don't know
+        // that for certain (calling includes won't work).  So, let's iterate
+        // through
+        for (let i = 0; i < this.numbers.group.length; i ++) {
+
+          let parsedNumber = parsePhoneNumberFromString(this.numbers.group[i].number)
+            .formatInternational();
+
+          if (parsedNumber == number) {
+
+            // Okay, found a match.  Let's make a request to remove it from this
+            // group
+            axios.delete(`${process.env.VUE_APP_ENDPOINT}/groups/${this.group.id}/phones/${this.numbers.group[i].id}`);
+
+            // Let's go ahead and remove said number from the array
+            this.numbers.group.splice(i, 1);
+
+          }
+
+        }
+      }
+    },
+
     editGroup: function() {
 
       // If the name changed, then go ahead and update that
@@ -171,7 +212,7 @@ export default {
           id: number.id,
           number: number.attributes.number
         });
-        
+
       })
 
     })

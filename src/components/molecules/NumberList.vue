@@ -6,9 +6,11 @@
     <NumberListItem v-for="number in parsedNumbers"
       :number="number"
       :transfer="number == transfer"
+      :removeable="removeable"
       :selectable="selectable"
       @select="$emit('select', $event)"
-      @transfer="$emit('transfer', $event)"/>
+      @transfer="$emit('transfer', $event)"
+      @remove="$emit('remove', $event)"/>
 
   </ul>
 </template>
@@ -18,7 +20,7 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import NumberListItem from '../atoms/NumberListItem.vue';
 export default {
   name: "NumberList",
-  props: ['numbers', 'selectable', 'transfer', 'transfering', 'reserve'],
+  props: ['numbers', 'selectable', 'transfer', 'transfering', 'removeable', 'reserve'],
   components: {
     NumberListItem
   },

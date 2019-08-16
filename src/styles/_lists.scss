@@ -15,5 +15,10 @@ li {
     color: $white;
     font-weight: 700;
     padding: 0 10px;
+
+    // Even if it's a link, color is still white
+    a {
+      color: $white;
+    }
   }
 }
