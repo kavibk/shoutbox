@@ -10,6 +10,10 @@
       Transfer
     </div>
 
+    <div class="list-content reserve" v-else-if="typeof number == 'object' && number.transfering">
+      <Loader />
+    </div>
+
     <div class="list-content" :class="{selectable, transfer}" v-else
       @click="selectable ? $emit('select', number) : ''">
       {{ number }}
@@ -19,9 +23,11 @@
 </template>
 
 <script>
+import Loader from './Loader.vue';
 export default {
   name: "NumberListItem",
-  props: ['number', 'duplicate', 'selectable', 'transfer', 'transfering']
+  props: ['number', 'duplicate', 'selectable', 'transfer', 'transfering'],
+  components: { Loader }
 }
 </script>
 

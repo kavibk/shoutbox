@@ -77,7 +77,7 @@
 
 		<div class="button button-clear float-right padding-0-right"
 			@click="$emit('cancel')">
-			<i class="fa fa-times"></i> Cancel
+			<i class="fa fa-check"></i> Done
 		</div>
 
 	</div>
@@ -104,7 +104,7 @@ export default {
 			loadingTo: false,
 			reserve: false,
 			toGroup: false,
-			toNumbers: false,
+			toNumbers: [],
 			transferTo: false,
 			transferFrom: false
 		}
@@ -162,17 +162,28 @@ export default {
 
 	methods: {
 
-		// Initiates a transfer.
+		// Transfers EVERYTHING the user has selected for transfer
+		bulkTransfer: function() {
+
+
+		},
+
+		// Used when user clicks on a number with the intent to transfer.  Could
+		// think of this as "priming" a transfer
 		startTransfer: function(side, transferNum) {
 
-
 			let numbers;
+
+			// First, which side did this come from?  We'll want to pick numbers from
+			// that side, naturally
 			if (side == 'from') {
 				numbers = this.fromNumbers;
 			} else if (side == 'to') {
 				numbers = this.toNumbers;
 			}
 
+			// Next, iterate through the numbers until you find our target.
+			// Once found, we'll mark it as reserved
 			let _this = this;
 			numbers.forEach((number, index) => {
 
@@ -187,7 +198,9 @@ export default {
 
 					_this.reserve = {
 						index,
-						number
+						number,
+						transfering: false,
+						transfered: false
 					};
 				}
 
@@ -199,9 +212,24 @@ export default {
 		// we take this to mean that we are transfering a number to that group.
 		startTransferFrom: function(number) {
 
+			this.reserve.transfering = true;
 			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.toGroup.id}/to/${this.fromGroup.id}`)
 			.then((response) => {
-				// TODO:
+
+				// Update from group numbers such that this number exists in their array
+				this.fromNumbers.push(number);
+
+				// And remove number from to numbers array
+				for(let i = 0; i < this.toNumbers.length; i ++) {
+					if (this.toNumbers[i] == number) {
+						this.toNumbers.splice(i, 1);
+						break;
+					}
+				}
+
+				this.reserve = false;
+				this.transfer = false;
+
 			})
 			.catch((error) => {
 
@@ -211,9 +239,22 @@ export default {
 
 		startTransferTo: function(number) {
 
+			this.reserve.transfering = true;
 			axios.put(`${process.env.VUE_APP_ENDPOINT}/phones/${number.id}/from/${this.fromGroup.id}/to/${this.toGroup.id}`)
 			.then((response) => {
-				// TODO
+
+				this.toNumbers.push(number);
+
+				for(let i = 0; i < this.fromNumbers.length; i ++) {
+					if (this.fromNumbers[i] == number) {
+						this.fromNumbers.splice(i, 1);
+						break;
+					}
+				}
+
+				this.reserve = false;
+				this.transfer = false;
+
 			})
 			.catch((error) => {
 

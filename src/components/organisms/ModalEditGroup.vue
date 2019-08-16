@@ -22,7 +22,8 @@
 
       <div class="column">
 
-        <button class="button button-clear float-right padding-0-right" @click="$emit('transfer', {group, numbers: numbers.group})">
+        <button class="button button-clear float-right padding-0-right"
+          @click="$emit('transfer', {group, numbers: numbers.group})">
           <i class="fas fa-arrow-right"></i> Transfer Numbers
         </button>
 
@@ -165,10 +166,12 @@ export default {
       this.loading = false;
       let numbers = response.data.included;
       numbers.forEach((number) => {
+
         this.numbers.group.push({
           id: number.id,
           number: number.attributes.number
         });
+        
       })
 
     })
