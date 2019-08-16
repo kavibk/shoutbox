@@ -18,8 +18,7 @@
         <div class="row">
 
           <div class="column">
-            <NumberField
-              @numbers="numbers = $event"/>
+            <NumberField @numbers="numbers = numbers.concat($event)"/>
           </div>
 
           <div class="column">
@@ -33,7 +32,10 @@
         <div class="row">
 
           <div class="column">
-            <NumberList :numbers="numbers" />
+            <NumberList
+              :numbers="numbers"
+              :removeable="true"
+              @remove="removeNumber"/>
           </div>
 
           <div class="column">
@@ -130,6 +132,16 @@ export default {
         }
       }
 
+    },
+
+    removeNumber: function(number) {
+
+      for(let i = 0; i < this.numbers.length; i ++) {
+        if (this.numbers[i] == number) {
+          this.numbers.splice(i, 1);
+          return;
+        }
+      }
     },
 
     reset: function() {
